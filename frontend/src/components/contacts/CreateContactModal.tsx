@@ -1,6 +1,6 @@
 import { useContacts } from '../../hooks/useContacts'
 import type { ContactCreate } from '../../types/contact'
-import { Modal } from '../ui/Modal'
+import Modal from '../ui/Modal'
 import { ContactForm } from './ContactForm'
 
 interface CreateContactModalProps {
@@ -20,9 +20,11 @@ export const CreateContactModal = ({ isOpen, onClose }: CreateContactModalProps)
     }
   }
 
+  const submitLabel = isCreating ? 'Creating...' : 'Create Contact'
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Create Contact">
-      <ContactForm onSubmit={handleSubmit} isSubmitting={isCreating} submitText="Create" />
+      <ContactForm onSubmit={handleSubmit} isSubmitting={isCreating} submitLabel={submitLabel} />
     </Modal>
   )
 }

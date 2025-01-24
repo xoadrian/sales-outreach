@@ -58,7 +58,7 @@ async def get_contact(
     except ContactServiceError as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.put("/{contact_id}", response_model=Contact)
+@router.patch("/{contact_id}", response_model=Contact)
 async def update_contact(
     contact_id: int,
     contact_update: ContactUpdate,

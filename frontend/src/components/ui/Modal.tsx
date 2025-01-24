@@ -9,7 +9,7 @@ interface ModalProps {
   children: ReactNode
 }
 
-export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog onClose={onClose} className="relative z-10">

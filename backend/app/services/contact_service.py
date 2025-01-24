@@ -70,7 +70,7 @@ class ContactService:
         return contact
 
     def get_all(self, skip: int = 0, limit: int = 100) -> List[ContactModel]:
-        return self.db.query(ContactModel).offset(skip).limit(limit).all()
+        return self.db.query(ContactModel).order_by(ContactModel.id).offset(skip).limit(limit).all()
 
     def update(self, contact_id: int, contact_update: ContactUpdate) -> ContactModel:
         try:

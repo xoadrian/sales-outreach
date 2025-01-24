@@ -1,24 +1,45 @@
 import clsx from 'clsx'
 import { FieldError, Path, UseFormRegister } from 'react-hook-form'
-import { ContactCreate } from '../../types/contact'
 import Select from './Select'
 
-interface FormFieldProps {
+interface FormFieldProps<TFormValues extends object> {
   label: string
-  name: Path<ContactCreate>
+  name: Path<TFormValues>
   type?: 'text' | 'email' | 'url' | 'textarea' | 'select'
   required?: boolean
-  register: UseFormRegister<ContactCreate>
+  register: UseFormRegister<TFormValues>
   error?: FieldError
   placeholder?: string
   options?: { value: string; label: string }[]
 }
 
-export const FormField = ({ label, name, type = 'text', required = false, register, error, placeholder, options = [] }: FormFieldProps) => {
+export function FormField<TFormValues extends object>({
+  label,
+  name,
+  type = 'text',
+  required = false,
+  register,
+  error,
+  placeholder,
+  options = [],
+}: FormFieldProps<TFormValues>) {
   const renderField = () => {
     if (type === 'select') {
       const { onChange, ...rest } = register(name)
       return <Select {...rest} onChange={(value) => onChange({ target: { value } })} options={options} error={!!error} />
+    }
+
+    if (type === 'textarea') {
+      return (
+        <textarea
+          id={name}
+          {...register(name)}
+          required={required}
+          placeholder={placeholder}
+          rows={4}
+          className={clsx('form-control', error && 'form-control-error')}
+        />
+      )
     }
 
     return (

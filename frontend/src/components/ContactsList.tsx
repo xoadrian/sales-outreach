@@ -8,7 +8,7 @@ import { ActionButton } from './ui/ActionButton'
 import { Button } from './ui/Button'
 import { StatusBadge } from './ui/StatusBadge'
 
-export const ContactsList = () => {
+export default function ContactsList() {
   const { contacts, isLoading, error, deleteContact, updateContact } = useContacts()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [editingContact, setEditingContact] = useState<Contact | null>(null)

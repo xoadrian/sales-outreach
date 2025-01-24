@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useContacts } from '../../hooks/useContacts'
 import { contactService } from '../../services/contact.service'
 import type { Contact } from '../../types/contact'
-import { Modal } from '../ui/Modal'
+import Modal from '../ui/Modal'
 import { ContactForm } from './ContactForm'
 
 interface EditContactModalProps {
@@ -41,6 +41,7 @@ export const EditContactModal = ({ isOpen, onClose, contact }: EditContactModalP
   }
 
   const showSpinner = isFetching || !currentContact
+  const submitLabel = isUpdating ? 'Updating...' : 'Update Contact'
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Contact">
@@ -49,7 +50,7 @@ export const EditContactModal = ({ isOpen, onClose, contact }: EditContactModalP
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
         </div>
       ) : (
-        <ContactForm onSubmit={handleSubmit} initialData={currentContact ?? contact} isSubmitting={isUpdating} />
+        <ContactForm onSubmit={handleSubmit} initialData={currentContact ?? contact} isSubmitting={isUpdating} submitLabel={submitLabel} />
       )}
     </Modal>
   )

@@ -21,10 +21,10 @@ interface ContactFormProps {
   onSubmit: (data: ContactCreate) => Promise<void>
   initialData?: Partial<ContactCreate>
   isSubmitting?: boolean
-  submitText?: string
+  submitLabel?: string
 }
 
-export const ContactForm = ({ onSubmit, initialData = {}, isSubmitting = false, submitText = 'Save' }: ContactFormProps) => {
+export const ContactForm = ({ onSubmit, initialData = {}, isSubmitting = false, submitLabel = 'Save' }: ContactFormProps) => {
   const {
     register,
     handleSubmit,
@@ -34,11 +34,9 @@ export const ContactForm = ({ onSubmit, initialData = {}, isSubmitting = false, 
     defaultValues: initialData,
   })
 
-  const buttonText = isSubmitting ? (submitText === 'Create' ? 'Creating' : 'Saving') : submitText
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      <FormField label="First Name" name="firstName" register={register} error={errors.firstName} required />
+      <FormField<ContactCreate> label="First Name" name="firstName" register={register} error={errors.firstName} required />
       <FormField label="Last Name" name="lastName" register={register} error={errors.lastName} required />
       <FormField label="Email" name="email" type="email" register={register} error={errors.email} required />
       <FormField label="Company" name="company" register={register} error={errors.company} required />
@@ -65,7 +63,7 @@ export const ContactForm = ({ onSubmit, initialData = {}, isSubmitting = false, 
 
       <div className="mt-8 flex justify-end">
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? `${buttonText}...` : buttonText}
+          {submitLabel}
         </Button>
       </div>
     </form>

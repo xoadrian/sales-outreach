@@ -24,7 +24,7 @@ export const contactService = {
 
   // Update existing contact
   updateContact: async (id: number, contact: ContactUpdate) => {
-    const { data } = await api.put<Contact>(`/contacts/${id}`, contact)
+    const { data } = await api.patch<Contact>(`/contacts/${id}`, contact)
     return data
   },
 
