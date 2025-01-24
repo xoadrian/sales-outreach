@@ -1,16 +1,24 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { useContacts } from '../hooks/useContacts'
-import type { Contact } from '../types/contact'
+import { Contact, ContactStatus } from '../types/contact'
 import { CreateContactModal } from './contacts/CreateContactModal'
 import { EditContactModal } from './contacts/EditContactModal'
 import { ActionButton } from './ui/ActionButton'
 import { Button } from './ui/Button'
+import { StatusBadge } from './ui/StatusBadge'
 
 export const ContactsList = () => {
-  const { contacts, isLoading, error, deleteContact } = useContacts()
+  const { contacts, isLoading, error, deleteContact, updateContact } = useContacts()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [editingContact, setEditingContact] = useState<Contact | null>(null)
+
+  const handleStatusChange = async (contact: Contact, newStatus: ContactStatus) => {
+    await updateContact({
+      id: contact.id,
+      contact: { status: newStatus },
+    })
+  }
 
   if (isLoading) {
     return (
@@ -44,11 +52,19 @@ export const ContactsList = () => {
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Name</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Email</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Company</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Position</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
+              {!contacts.length && (
+                <tr>
+                  <td colSpan={6} className="text-center py-4">
+                    No contacts found
+                  </td>
+                </tr>
+              )}
               {contacts.map((contact) => (
                 <tr key={contact.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
@@ -56,19 +72,12 @@ export const ContactsList = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{contact.email}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{contact.company}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{contact.position}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                      ${
-                        contact.status === 'new'
-                          ? 'bg-green-100 text-green-800'
-                          : contact.status === 'contacted'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}
-                    >
-                      {contact.status}
-                    </span>
+                    <StatusBadge
+                      status={contact.status as ContactStatus}
+                      onStatusChange={(newStatus) => handleStatusChange(contact, newStatus)}
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center gap-2">

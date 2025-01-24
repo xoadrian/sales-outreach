@@ -21,6 +21,7 @@ export interface ContactCreate {
   position: string
   linkedinUrl?: string
   notes?: string
+  status?: string
 }
 
 export interface ContactUpdate {
@@ -34,3 +35,6 @@ export interface ContactUpdate {
   status?: string
   isActive?: boolean
 }
+
+export const CONTACT_STATUSES = ['new', 'contacted', 'responded', 'converted'] as const
+export type ContactStatus = (typeof CONTACT_STATUSES)[number]

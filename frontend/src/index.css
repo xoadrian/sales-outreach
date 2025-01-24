@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .form-control {
+    @apply block w-full px-3 py-2 rounded-md shadow-sm
+    text-gray-900 bg-white border border-gray-300
+    focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500;
+  }
+
+  .form-control-error {
+    @apply border-red-300 focus:border-red-500 focus:ring-red-500;
+  }
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -30,6 +42,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  @apply text-gray-900;
 }
 
 h1 {
@@ -76,4 +89,9 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: #111827;
   -webkit-box-shadow: 0 0 0px 1000px white inset;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Text Gradients */
+.text-primary-gradient {
+  @apply text-transparent bg-[linear-gradient(90deg,#7D37FF_2.63%,#0CF_97.35%)] bg-clip-text;
 }

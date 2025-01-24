@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import type { ContactCreate } from '../../types/contact'
+import { CONTACT_STATUSES } from '../../types/contact'
 import { Button } from '../ui/Button'
 import { FormField } from '../ui/FormField'
 
@@ -13,6 +14,7 @@ const contactSchema = z.object({
   position: z.string().min(1, 'Position is required'),
   linkedinUrl: z.string().url('Invalid LinkedIn URL').optional().or(z.literal('')),
   notes: z.string().optional(),
+  status: z.enum(CONTACT_STATUSES).optional(),
 })
 
 interface ContactFormProps {
@@ -49,6 +51,17 @@ export const ContactForm = ({ onSubmit, initialData = {}, isSubmitting = false, 
         placeholder="https://linkedin.com/in/username"
       />
       <FormField label="Notes" name="notes" register={register} error={errors.notes} />
+      <FormField
+        label="Status"
+        name="status"
+        type="select"
+        register={register}
+        error={errors.status}
+        options={CONTACT_STATUSES.map((status) => ({
+          value: status,
+          label: status.charAt(0).toUpperCase() + status.slice(1),
+        }))}
+      />
 
       <div className="mt-8 flex justify-end">
         <Button type="submit" disabled={isSubmitting}>
