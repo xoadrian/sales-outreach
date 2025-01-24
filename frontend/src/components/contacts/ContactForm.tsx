@@ -1,0 +1,60 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import type { ContactCreate } from '../../types/contact'
+import { Button } from '../ui/Button'
+import { FormField } from '../ui/FormField'
+
+const contactSchema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  email: z.string().email('Invalid email address'),
+  company: z.string().min(1, 'Company is required'),
+  position: z.string().min(1, 'Position is required'),
+  linkedinUrl: z.string().url('Invalid LinkedIn URL').optional().or(z.literal('')),
+  notes: z.string().optional(),
+})
+
+interface ContactFormProps {
+  onSubmit: (data: ContactCreate) => Promise<void>
+  initialData?: Partial<ContactCreate>
+  isSubmitting?: boolean
+  submitText?: string
+}
+
+export const ContactForm = ({ onSubmit, initialData = {}, isSubmitting = false, submitText = 'Save' }: ContactFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ContactCreate>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: initialData,
+  })
+
+  const buttonText = isSubmitting ? (submitText === 'Create' ? 'Creating' : 'Saving') : submitText
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <FormField label="First Name" name="firstName" register={register} error={errors.firstName} required />
+      <FormField label="Last Name" name="lastName" register={register} error={errors.lastName} required />
+      <FormField label="Email" name="email" type="email" register={register} error={errors.email} required />
+      <FormField label="Company" name="company" register={register} error={errors.company} required />
+      <FormField label="Position" name="position" register={register} error={errors.position} required />
+      <FormField
+        label="LinkedIn URL"
+        name="linkedinUrl"
+        register={register}
+        error={errors.linkedinUrl}
+        placeholder="https://linkedin.com/in/username"
+      />
+      <FormField label="Notes" name="notes" register={register} error={errors.notes} />
+
+      <div className="mt-8 flex justify-end">
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? `${buttonText}...` : buttonText}
+        </Button>
+      </div>
+    </form>
+  )
+}
